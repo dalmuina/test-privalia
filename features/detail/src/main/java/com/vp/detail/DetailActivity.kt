@@ -23,6 +23,8 @@ class DetailActivity : DaggerAppCompatActivity(), QueryProvider {
     lateinit var factory: ViewModelProvider.Factory
     private lateinit var movieDetail: MovieDetail;
     private lateinit var detailViewModel: DetailsViewModel;
+    private lateinit var menu: Menu;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
@@ -36,18 +38,25 @@ class DetailActivity : DaggerAppCompatActivity(), QueryProvider {
         })
         detailViewModel.details().observe(this, Observer {
             movieDetail = it
+            menu?.getItem(0)?.setChecked(isDetailMovieFavorite())
+            if (isDetailMovieFavorite()) {
+                menu?.getItem(0)?.setIcon(R.drawable.ic_star_selected);
+            } else {
+                menu?.getItem(0)?.setIcon(R.drawable.ic_star);
+            }
+
         })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.detail_menu, menu)
+        this.menu = menu!!
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.star -> {
-                /*
                 if (!item.isChecked) {
                     item.setIcon(R.drawable.ic_star_selected)
                     saveDetailMovieFavorite();
@@ -55,16 +64,28 @@ class DetailActivity : DaggerAppCompatActivity(), QueryProvider {
                     item.setIcon(R.drawable.ic_star);
                     deleteDetailMovieFavorite();
                 }
-                item.setChecked(!item.isChecked);*/
-                checkDetailMovieFavorite()
+                item.setChecked(!item.isChecked);
+                //checkDetailMovieFavorite()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun checkDetailMovieFavorite() {
+    /*fun checkDetailMovieFavorite() {
         detailViewModel.checkDetailMovieFavorites(movieDetail, this);
+    }*/
+
+    fun isDetailMovieFavorite(): Boolean {
+        return detailViewModel.isDetailMovieFavorites(movieDetail, this);
+    }
+
+    fun saveDetailMovieFavorite(){
+        detailViewModel.saveDetailMovieFavorite(movieDetail,this)
+    }
+
+    fun deleteDetailMovieFavorite(){
+        detailViewModel.deleteDetailMovieFavorites(movieDetail,this)
     }
 
     fun showMessage(message: String) {

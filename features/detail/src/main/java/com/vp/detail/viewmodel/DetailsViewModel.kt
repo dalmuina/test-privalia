@@ -49,14 +49,16 @@ class DetailsViewModel @Inject constructor(private val detailService: DetailServ
         })
     }
 
-    fun saveDetailMovieFavorites(listMovieDetail: ArrayList<MovieDetail>, movieDetail: MovieDetail, detailActivity: DetailActivity) {
-        listMovieDetail.add(movieDetail);
-        saveListFavorites(listMovieDetail, detailActivity);
+    fun saveDetailMovieFavorite(movieDetail: MovieDetail, detailActivity: DetailActivity) {
+        var listMoviesFavorites: ArrayList<MovieDetail> = readListFavorites(detailActivity)
+        listMoviesFavorites.add(movieDetail)
+        saveListFavorites(listMoviesFavorites, detailActivity)
     }
 
-    fun deleteDetailMovieFavorites(listMoviesFavorites: ArrayList<MovieDetail>, movieDetail: MovieDetail, detailActivity: DetailActivity) {
-        listMoviesFavorites.remove(movieDetail);
-        saveListFavorites(listMoviesFavorites, detailActivity);
+    fun deleteDetailMovieFavorites(movieDetail: MovieDetail, detailActivity: DetailActivity) {
+        var listMoviesFavorites: ArrayList<MovieDetail> = readListFavorites(detailActivity)
+        listMoviesFavorites.remove(movieDetail)
+        saveListFavorites(listMoviesFavorites, detailActivity)
     }
 
     fun readListFavorites(detailActivity: DetailActivity): ArrayList<MovieDetail> {
@@ -85,7 +87,7 @@ class DetailsViewModel @Inject constructor(private val detailService: DetailServ
         editor.commit()
     }
 
-    fun checkDetailMovieFavorites(movieDetail: MovieDetail, detailActivity: DetailActivity) {
+    /*fun checkDetailMovieFavorites(movieDetail: MovieDetail, detailActivity: DetailActivity) {
         var listMoviesFavorites: ArrayList<MovieDetail> = readListFavorites(detailActivity)
         if (listMoviesFavorites.contains(movieDetail)) {
             deleteDetailMovieFavorites(listMoviesFavorites, movieDetail, detailActivity)
@@ -94,6 +96,19 @@ class DetailsViewModel @Inject constructor(private val detailService: DetailServ
             saveDetailMovieFavorites(listMoviesFavorites, movieDetail, detailActivity);
             detailActivity.showMessage(detailActivity.getString(R.string.favorite_movie_saved));
         }
+
+    }*/
+
+    fun isDetailMovieFavorites(movieDetail: MovieDetail, detailActivity: DetailActivity):Boolean {
+        var listMoviesFavorites: ArrayList<MovieDetail> = readListFavorites(detailActivity)
+        return listMoviesFavorites.contains(movieDetail)
+        /*if (listMoviesFavorites.contains(movieDetail)) {
+            deleteDetailMovieFavorites(listMoviesFavorites, movieDetail, detailActivity)
+            detailActivity.showMessage(detailActivity.getString(R.string.favorite_movie_deleted));
+        } else {
+            saveDetailMovieFavorites(listMoviesFavorites, movieDetail, detailActivity);
+            detailActivity.showMessage(detailActivity.getString(R.string.favorite_movie_saved));
+        }*/
 
     }
 

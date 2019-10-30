@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -25,25 +27,31 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                tools:text="Interfview"
+                android:textStyle="bold"
+                style="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp" />
+                tools:text="2011"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/director"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp" />
+                tools:text="Director"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/runtime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp" />
+                tools:text="118 min"
+                android:textSize="14sp" />
         </LinearLayout>
 
 
@@ -53,6 +61,7 @@
         android:id="@+id/plot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp" />
+        tools:text="Decripción"
+        android:textSize="12sp" />
 
 </LinearLayout>

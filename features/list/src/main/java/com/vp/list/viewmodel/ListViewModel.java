@@ -1,5 +1,7 @@
 package com.vp.list.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -36,7 +38,7 @@ public class ListViewModel extends ViewModel {
 
     public void searchMoviesByTitle(@NonNull String title, int page) {
 
-        if (page == 1 && !title.equals(currentTitle)) {
+        if (page == 1) {
             aggregatedItems.clear();
             currentTitle = title;
             liveData.setValue(SearchResult.inProgress());
@@ -46,9 +48,9 @@ public class ListViewModel extends ViewModel {
             public void onResponse(@NonNull Call<SearchResponse> call, @NonNull Response<SearchResponse> response) {
 
                 SearchResponse result = response.body();
-
                 if (result != null) {
                     aggregatedItems.addAll(result.getSearch());
+                    liveData.setValue(SearchResult.success(aggregatedItems,result.getTotalResults()));
                 }
             }
 

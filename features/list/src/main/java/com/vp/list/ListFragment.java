@@ -2,6 +2,8 @@ package com.vp.list;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -12,6 +14,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +46,15 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
     private ProgressBar progressBar;
     private TextView errorTextView;
     private String currentQuery = "Interview";
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressBar progressBarHorizontal;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidSupportInjection.inject(this);
+
         listViewModel = ViewModelProviders.of(this, factory).get(ListViewModel.class);
     }
 
@@ -62,6 +71,16 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
         viewAnimator = view.findViewById(R.id.viewAnimator);
         progressBar = view.findViewById(R.id.progressBar);
         errorTextView = view.findViewById(R.id.errorText);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        progressBarHorizontal = view.findViewById(R.id.progressBarHorizontal);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
+                listAdapter.clearItems();
+
+            }
+        });
 
         if (savedInstanceState != null) {
             currentQuery = savedInstanceState.getString(CURRENT_QUERY);
@@ -69,6 +88,11 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
 
         initBottomNavigation(view);
         initList();
+        loadData();
+    }
+
+    private void loadData(){
+        listAdapter.clearItems();
         listViewModel.observeMovies().observe(this, searchResult -> {
             if (searchResult != null) {
                 handleResult(listAdapter, searchResult);
@@ -122,6 +146,8 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
             case LOADED: {
                 setItemsData(listAdapter, searchResult);
                 showList();
+                swipeRefreshLayout.setRefreshing(false);
+                progressBarHorizontal.setVisibility(View.INVISIBLE);
                 break;
             }
             case IN_PROGRESS: {
@@ -130,6 +156,7 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
             }
             default: {
                 showError();
+                swipeRefreshLayout.setRefreshing(false);
             }
         }
         gridPagingScrollListener.markLoading(false);
@@ -147,12 +174,16 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(CURRENT_QUERY, currentQuery);
+
     }
 
     @Override
     public void loadMoreItems(int page) {
         gridPagingScrollListener.markLoading(true);
         listViewModel.searchMoviesByTitle(currentQuery, page);
+        if (page!=1) {
+            progressBarHorizontal.setVisibility(View.VISIBLE);
+        }
     }
 
     public void submitSearchQuery(@NonNull final String query) {
@@ -164,6 +195,16 @@ public class ListFragment extends Fragment implements GridPagingScrollListener.L
 
     @Override
     public void onItemClick(String imdbID) {
-        //TODO handle click events
+        Intent intent = null;
+        try {
+            intent = new Intent(getActivity(),
+                    Class.forName("com.vp.detail.DetailActivity"));
+            intent.putExtra("imdbID",imdbID);
+            startActivity(intent);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

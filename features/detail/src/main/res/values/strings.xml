@@ -6,4 +6,6 @@
     <string name="runtime">Runtime: %s</string>
     <string name="loading_error">Loading error</string>
     <string name="favorite">Favorite</string>
+    <string name="favorite_movie_saved">Película guardada en favoritas</string>
+    <string name="favorite_movie_deleted">Película borrada en favoritas</string>
 </resources>

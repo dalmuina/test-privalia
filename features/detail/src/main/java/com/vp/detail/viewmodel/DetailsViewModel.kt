@@ -10,12 +10,18 @@ import retrofit2.Call
 import retrofit2.Response
 import javax.inject.Inject
 import javax.security.auth.callback.Callback
+import com.google.gson.Gson
+import android.preference.PreferenceManager
+import com.google.gson.reflect.TypeToken
+import com.vp.detail.R
+
 
 class DetailsViewModel @Inject constructor(private val detailService: DetailService) : ViewModel() {
 
     private val details: MutableLiveData<MovieDetail> = MutableLiveData()
     private val title: MutableLiveData<String> = MutableLiveData()
     private val loadingState: MutableLiveData<LoadingState> = MutableLiveData()
+    private val LIST_MOVIE_DETAIL = "list_movie_detail"
 
     fun title(): LiveData<String> = title
 
@@ -41,6 +47,54 @@ class DetailsViewModel @Inject constructor(private val detailService: DetailServ
                 loadingState.value = LoadingState.ERROR
             }
         })
+    }
+
+    fun saveDetailMovieFavorites(listMovieDetail: ArrayList<MovieDetail>, movieDetail: MovieDetail, detailActivity: DetailActivity) {
+        listMovieDetail.add(movieDetail);
+        saveListFavorites(listMovieDetail, detailActivity);
+    }
+
+    fun deleteDetailMovieFavorites(listMoviesFavorites: ArrayList<MovieDetail>, movieDetail: MovieDetail, detailActivity: DetailActivity) {
+        listMoviesFavorites.remove(movieDetail);
+        saveListFavorites(listMoviesFavorites, detailActivity);
+    }
+
+    fun readListFavorites(detailActivity: DetailActivity): ArrayList<MovieDetail> {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(detailActivity)
+        val gson = Gson()
+        val json = sharedPrefs.getString(LIST_MOVIE_DETAIL, "")
+        val listMovieFavoritesAsString = gson.fromJson<Any>(json,
+                object : TypeToken<ArrayList<MovieDetail>>() {
+
+                }.type)
+        var arrayListMovieFavorites = ArrayList<MovieDetail>();
+        if (listMovieFavoritesAsString!= null) {
+            arrayListMovieFavorites = listMovieFavoritesAsString as ArrayList<MovieDetail>;
+        }
+        return arrayListMovieFavorites;
+    }
+
+    fun saveListFavorites(listMovieDetail: ArrayList<MovieDetail>, detailActivity: DetailActivity) {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(detailActivity)
+        val editor = sharedPrefs.edit()
+        val gson = Gson()
+
+        val json = gson.toJson(listMovieDetail)
+
+        editor.putString(LIST_MOVIE_DETAIL, json)
+        editor.commit()
+    }
+
+    fun checkDetailMovieFavorites(movieDetail: MovieDetail, detailActivity: DetailActivity) {
+        var listMoviesFavorites: ArrayList<MovieDetail> = readListFavorites(detailActivity)
+        if (listMoviesFavorites.contains(movieDetail)) {
+            deleteDetailMovieFavorites(listMoviesFavorites, movieDetail, detailActivity)
+            detailActivity.showMessage(detailActivity.getString(R.string.favorite_movie_deleted));
+        } else {
+            saveDetailMovieFavorites(listMoviesFavorites, movieDetail, detailActivity);
+            detailActivity.showMessage(detailActivity.getString(R.string.favorite_movie_saved));
+        }
+
     }
 
     enum class LoadingState {

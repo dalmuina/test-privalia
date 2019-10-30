@@ -27,7 +27,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation('androidx.constraintlayout:constraintlayout:1.1.2')
-
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation "com.google.code.gson:gson:$rootProject.gson"
+    implementation 'com.squareup.picasso:picasso:2.71828'
     //support
     implementation "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
 

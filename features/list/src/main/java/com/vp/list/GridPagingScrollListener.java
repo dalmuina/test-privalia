@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GridPagingScrollListener extends RecyclerView.OnScrollListener {
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 5;
     private final GridLayoutManager layoutManager;
     private static final LoadMoreItemsListener EMPTY_LISTENER = (int page) -> {
         //empty listener

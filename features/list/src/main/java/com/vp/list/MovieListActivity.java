@@ -18,10 +18,11 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 public class MovieListActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private static final String IS_SEARCH_VIEW_ICONIFIED = "is_search_view_iconified";
-
+    private static final String SEARCH_TEXT_SAVED = "search_text_saved";
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingActivityInjector;
     private SearchView searchView;
+    private String searchTextSaved;
     private boolean searchViewExpanded = true;
 
     @Override
@@ -37,6 +38,7 @@ public class MovieListActivity extends AppCompatActivity implements HasSupportFr
                     .commit();
         } else {
             searchViewExpanded = savedInstanceState.getBoolean(IS_SEARCH_VIEW_ICONIFIED);
+            searchTextSaved = savedInstanceState.getString(SEARCH_TEXT_SAVED);
         }
     }
 
@@ -59,10 +61,12 @@ public class MovieListActivity extends AppCompatActivity implements HasSupportFr
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                searchTextSaved = newText;
                 return false;
             }
         });
 
+        searchView.setQuery(searchTextSaved, false);
         return true;
     }
 
@@ -70,6 +74,7 @@ public class MovieListActivity extends AppCompatActivity implements HasSupportFr
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_SEARCH_VIEW_ICONIFIED, searchView.isIconified());
+        outState.putString(SEARCH_TEXT_SAVED,searchTextSaved);
     }
 
     @Override

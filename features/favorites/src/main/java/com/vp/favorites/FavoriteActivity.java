@@ -1,6 +1,7 @@
 package com.vp.favorites;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,4 +40,5 @@ public class FavoriteActivity extends AppCompatActivity {
         ArrayList<MovieFavorite> arrayList = gson.fromJson(json, type);
         return arrayList;
     }
+
 }

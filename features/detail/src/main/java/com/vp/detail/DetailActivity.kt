@@ -65,16 +65,12 @@ class DetailActivity : DaggerAppCompatActivity(), QueryProvider {
                     deleteDetailMovieFavorite();
                 }
                 item.setChecked(!item.isChecked);
-                //checkDetailMovieFavorite()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    /*fun checkDetailMovieFavorite() {
-        detailViewModel.checkDetailMovieFavorites(movieDetail, this);
-    }*/
 
     fun isDetailMovieFavorite(): Boolean {
         return detailViewModel.isDetailMovieFavorites(movieDetail, this);
@@ -88,12 +84,6 @@ class DetailActivity : DaggerAppCompatActivity(), QueryProvider {
         detailViewModel.deleteDetailMovieFavorites(movieDetail,this)
     }
 
-    fun showMessage(message: String) {
-        Toast.makeText(this, message,
-                Toast.LENGTH_LONG).show();
-    }
-
-    //intent?.data?.getQueryParameter("imdbID")
     override fun getMovieId(): String {
         return intent.getStringExtra("imdbID") ?: run {
             throw IllegalStateException("You must provide movie id to display details")

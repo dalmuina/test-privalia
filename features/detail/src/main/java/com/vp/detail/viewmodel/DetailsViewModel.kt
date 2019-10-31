@@ -87,28 +87,10 @@ class DetailsViewModel @Inject constructor(private val detailService: DetailServ
         editor.commit()
     }
 
-    /*fun checkDetailMovieFavorites(movieDetail: MovieDetail, detailActivity: DetailActivity) {
-        var listMoviesFavorites: ArrayList<MovieDetail> = readListFavorites(detailActivity)
-        if (listMoviesFavorites.contains(movieDetail)) {
-            deleteDetailMovieFavorites(listMoviesFavorites, movieDetail, detailActivity)
-            detailActivity.showMessage(detailActivity.getString(R.string.favorite_movie_deleted));
-        } else {
-            saveDetailMovieFavorites(listMoviesFavorites, movieDetail, detailActivity);
-            detailActivity.showMessage(detailActivity.getString(R.string.favorite_movie_saved));
-        }
-
-    }*/
 
     fun isDetailMovieFavorites(movieDetail: MovieDetail, detailActivity: DetailActivity):Boolean {
         var listMoviesFavorites: ArrayList<MovieDetail> = readListFavorites(detailActivity)
         return listMoviesFavorites.contains(movieDetail)
-        /*if (listMoviesFavorites.contains(movieDetail)) {
-            deleteDetailMovieFavorites(listMoviesFavorites, movieDetail, detailActivity)
-            detailActivity.showMessage(detailActivity.getString(R.string.favorite_movie_deleted));
-        } else {
-            saveDetailMovieFavorites(listMoviesFavorites, movieDetail, detailActivity);
-            detailActivity.showMessage(detailActivity.getString(R.string.favorite_movie_saved));
-        }*/
 
     }
 

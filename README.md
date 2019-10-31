@@ -1,3 +1,13 @@
+# Fixes
+1. Corregido el bug Wrong State y realizado Test Unitario
+2. Corregido el bug Lost Event
+3. Corregido el bug Lost State. He aprovechado para corregir otro error que hacía que las películas se repitieran al girar el móvil
+4. Añadida la funcionalidad para cargar nuevas películas como elemento drag and reload
+5. Añadida la funcionalidad para guardar favoritos y mostrarlos en otra pantalla empleando SharedPreferences. Cuando se entra en Detail se puede ver que la estrella en el toolbar se marca y desmarca al añadir o eliminar películas
+6. Reducción del tamaño de la apk
+7. Añadido indicador de carga de nuevas páginas de películas
+
+
 # Introduction
 
 Hello future colleague!
